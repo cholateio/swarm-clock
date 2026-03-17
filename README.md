@@ -34,6 +34,8 @@ I built th same project using p5.js and electron 5 years ago without AI. This pr
 
 ## Install
 
-npm install ws
+npm install
 
-npm install electron concurrently wait-on --save-dev
+npm run start:all (run locally)
+
+npm run build (build .exe)
