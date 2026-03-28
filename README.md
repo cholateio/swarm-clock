@@ -1,6 +1,6 @@
-## Virtual Music Clock
+## Virtual Music Clock (Swarm Edition)
 
-A desktop-grade audio visualization utility built with Electron and Next.js, featuring high-DPI transparent rendering, dynamic color mapping, and treble-sensitive glitch effects.
+A desktop-grade audio visualization utility built with Electron and Next.js, featuring a high-performance WebGL2 GPGPU particle system. This "Swarm Edition" transforms the traditional spectrum ring into a living ecosystem of thousands of particles that react, shatter, and recombine to the beat of your music.
 
 ## Preview
 
@@ -8,19 +8,27 @@ A desktop-grade audio visualization utility built with Electron and Next.js, fea
 
 ## Why I Made This
 
-I built th same project using p5.js and electron 5 years ago without AI. This project is the restructure one. Using totally different techs such as websocket, also with gemini. But the core fft method is the same.
+This project is a complete architectural restructure of my original music clock built 5 years ago with p5.js. By moving away from simple 2D Canvas lines to a GPGPU (General-Purpose Computing on Graphics Processing Units) approach, we can now simulate over 10,000 individual "swarm" particles at a locked 60FPS, each with its own momentum, friction, and "personality".
 
 ## Features
 
-- 3-Tier Decoupled Architecture: The system is split into three core modules: the Visual Terminal, the Audio Engine Worker, and a Local WebSocket Hub. This design ensures that heavy FFT (Fast Fourier Transform) calculations never block the UI rendering thread, maintaining a rock-solid 60FPS experience.
+- WebGL2 GPGPU Particle Engine: Uses Ping-Pong Framebuffer techniques to store and update particle positions and velocities directly on the GPU textures.
 
-- High-DPI Sharp Rendering: The system automatically detects the Device Pixel Ratio (DPR) and dynamically scales the Canvas's physical pixel dimensions. This ensures that clock lines and glows remain pin-sharp on 4K or Retina displays without any blurring or artifacts.
+- Swarm Ecology (Freedom vs. Core):
+    - Particles are differentiated by a unique random weight (pRand).
 
-- Dynamic HSL Color Mapping: Moving beyond static color toggles, the visualizer maps audio bass energy to the HSL color space. As the music intensifies, the hue and lightness shift fluidly from a signature "Miku Green" to vibrant cyan and deep blues, creating a living, breathing interface.
+    - Core Particles: Tightly bound to the clock's circular spectrum.
 
-- Treble-Triggered Glitch Effects: Built-in real-time treble detection logic monitors high-frequency peaks. When sharp audio triggers occur (such as hi-hats or electronic synths), the clock area undergoes localized horizontal slicing and chromatic aberration effects, adding a rhythmic "shatter" impact to the visuals.
+    - Freedom Particles: React to Curl Noise and "swarm" around the perimeter, creating a nebula-like trail.
 
-- Smooth Linear Interpolation (Lerp): All spectral data undergoes linear interpolation to absorb sudden zeros or erratic jumps in audio sampling. This results in a spectrum ring that expands and contracts with organic, fluid elasticity.
+- Spectrum-Driven Deformation: The swarm's return target is dynamically recalculated based on 64 frequency bands, creating a fluid, organic wave that mirrors the audio input.
+
+- Dynamic HSL Color Mapping: Maps real-time Bass energy to the HSL color space. The swarm shifts from a calm "Miku Green" to vibrant cyan and intense blues as the low-end frequency intensifies.
+
+- Dual-Layer Rendering:
+    - WebGL Layer: Handles the complex physical simulation and additive glow of the swarm particles.
+
+    - 2D Canvas Layer: Renders high-DPI sharp clock hands for clear time readability.
 
 ## Tech Stack
 
@@ -30,12 +38,17 @@ I built th same project using p5.js and electron 5 years ago without AI. This pr
 
 - Audio Engine: Native Web Audio API for FFT Analysis
 
-- Graphics: HTML5 Canvas API with hardware-accelerated post-processing
+- Graphics: WebGL2 for GPGPU simulation + HTML5 Canvas 2D for the UI
 
 ## Install
 
+```
+# Install dependencies
 npm install
 
-npm run start:all (run locally)
+# Start the full environment (Next.js + WebSocket Server + Electron)
+npm run start:all
 
-npm run build (build .exe)
+# Build the production executable (.exe / .app)
+npm run build
+```

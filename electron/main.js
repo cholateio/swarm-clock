@@ -129,7 +129,7 @@ async function bootstrap() {
         createWebSocketServer();
         createWindows();
 
-        const iconPath = path.join(__dirname, isDev ? '../app/favicon.ico' : '../out/favicon.ico');
+        const iconPath = path.join(__dirname, isDev ? '../app/clock.ico' : '../out/clock.ico');
         tray = new Tray(iconPath);
         tray.setToolTip('Virtual Music Clock');
 
