@@ -52,3 +52,9 @@ npm run start:all
 # Build the production executable (.exe / .app)
 npm run build
 ```
+
+## Run
+
+Currently the project needs to enable Stereo Mix to get the speaker's audio.
+
+[How to enable Stereo Mix in Win10](https://www.youtube.com/watch?v=Bd3moKLV5sE)
