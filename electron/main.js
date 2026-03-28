@@ -80,6 +80,10 @@ function createWindows() {
         },
     });
 
+    mainWindow.on('closed', () => {
+        app.quit();
+    });
+
     mainWindow.setIgnoreMouseEvents(isLocked, { forward: true });
 
     // 視窗 B: 音訊引擎 Worker (隱藏、不降速)
@@ -129,7 +133,7 @@ async function bootstrap() {
         createWebSocketServer();
         createWindows();
 
-        const iconPath = path.join(__dirname, isDev ? '../app/clock.ico' : '../out/clock.ico');
+        const iconPath = path.join(__dirname, 'clock.ico');
         tray = new Tray(iconPath);
         tray.setToolTip('Virtual Music Clock');
 
@@ -146,5 +150,5 @@ async function bootstrap() {
 bootstrap();
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+    app.quit();
 });
