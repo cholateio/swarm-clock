@@ -58,3 +58,8 @@ npm run build
 Currently the project needs to enable Stereo Mix to get the speaker's audio.
 
 [How to enable Stereo Mix in Win10](https://www.youtube.com/watch?v=Bd3moKLV5sE)
+
+You can change the setting to fix the clock also
+
+<img width="632" height="502" alt="image" src="https://github.com/user-attachments/assets/06e4b2b4-84e9-4e35-8ee4-f99cafb70e8d" />
+
