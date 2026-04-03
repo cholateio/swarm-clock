@@ -39,7 +39,7 @@ function updateTrayMenu() {
     if (!tray) return;
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: isLocked ? '🔓 Unlock (allows dragging).' : '🔒 Lock (mouse pass-through)',
+            label: isLocked ? '🔓 Unlock (allows dragging)' : '🔒 Lock (mouse pass-through)',
             click: () => {
                 isLocked = !isLocked;
                 if (mainWindow) {
