@@ -46,10 +46,10 @@ This project is a complete architectural restructure of my original music clock 
 # Install dependencies
 npm install
 
-# Start the full environment (Next.js + WebSocket Server + Electron)
+# Develop mode: start the full environment
 npm run start:all
 
-# Build the production executable (.exe / .app)
+# Build mode: production executable (.exe / .app)
 npm run build
 ```
 
