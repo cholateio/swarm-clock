@@ -61,5 +61,6 @@ Currently the project needs to enable Stereo Mix to get the speaker's audio.
 
 You can change the setting to fix the clock also
 
-<img width="632" height="502" alt="image" src="https://github.com/user-attachments/assets/06e4b2b4-84e9-4e35-8ee4-f99cafb70e8d" />
+<img width="568" height="370" alt="image" src="https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4" />
+
 
