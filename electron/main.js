@@ -39,7 +39,7 @@ function updateTrayMenu() {
     if (!tray) return;
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: isLocked ? '🔓 解鎖時鐘 (允許拖曳移動)' : '🔒 鎖定時鐘 (啟用滑鼠穿透)',
+            label: isLocked ? '🔓 Unlock (allows dragging).' : '🔒 Lock (mouse pass-through)',
             click: () => {
                 isLocked = !isLocked;
                 if (mainWindow) {
@@ -50,11 +50,11 @@ function updateTrayMenu() {
             },
         },
         { type: 'separator' },
-        { label: '👁️ 顯示時鐘', click: () => mainWindow?.show() },
-        { label: '👻 隱藏時鐘', click: () => mainWindow?.hide() },
+        { label: '👁️ Show the clock', click: () => mainWindow?.show() },
+        { label: '👻 Hide the clock', click: () => mainWindow?.hide() },
         { type: 'separator' },
         {
-            label: '❌ 結束程式',
+            label: '❌ Close',
             click: () => {
                 app.isQuiting = true;
                 app.quit();
