@@ -586,7 +586,7 @@ export default function ClockTerminal() {
         requestAnimationFrame(initCanvasAndWebGL);
 
         const connectWebSocket = () => {
-            wsRef.current = new WebSocket('ws://localhost:8080');
+            wsRef.current = new WebSocket('ws://127.0.0.1:8080');
             wsRef.current.onmessage = (event) => {
                 try {
                     audioDataRef.current = JSON.parse(event.data);

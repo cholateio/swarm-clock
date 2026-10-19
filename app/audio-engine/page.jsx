@@ -18,7 +18,7 @@ export default function AudioEngine() {
         const initEngine = async () => {
             try {
                 // 連接 WebSocket Server
-                wsRef.current = new WebSocket('ws://localhost:8080');
+                wsRef.current = new WebSocket('ws://127.0.0.1:8080/engine');
                 wsRef.current.onopen = () => setStatus('WebSocket Connected');
                 wsRef.current.onerror = (err) => console.error('WS Error', err);
 

@@ -2,6 +2,7 @@
 const { app, BrowserWindow, session, Tray, Menu } = require('electron');
 const path = require('path');
 const WebSocket = require('ws');
+const { isAppUrl, isEngineRequest, createWsServerOptions } = require('./security');
 
 // 解決背景 AudioContext 無法自動播放的問題 (繞過使用者互動限制)
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
@@ -15,12 +16,19 @@ const isDev = !app.isPackaged;
 
 function createWebSocketServer() {
     try {
-        wss = new WebSocket.Server({ port: 8080 });
-        wss.on('connection', (ws) => {
+        // 只綁定 127.0.0.1，且 verifyClient 只接受本 App 的 Origin
+        wss = new WebSocket.Server(createWsServerOptions(isDev));
+        wss.on('error', (err) => {
+            console.error('WebSocket Server Error:', err);
+        });
+        wss.on('connection', (ws, req) => {
+            ws.isEngine = isEngineRequest(req);
             ws.on('message', (message) => {
+                // 只轉發來自音訊引擎 (/engine) 的資料，忽略其他 client 送來的訊息
+                if (!ws.isEngine) return;
                 // Pub/Sub 轉發邏輯：將收到來自 Worker 的音訊資料，廣播給所有連線的 Client (主視覺)
                 wss.clients.forEach((client) => {
-                    if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    if (client !== ws && !client.isEngine && client.readyState === WebSocket.OPEN) {
                         client.send(message.toString());
                     }
                 });
@@ -98,13 +106,12 @@ function createWindows() {
         },
     });
 
-    // 關鍵防呆 1：自動允許麥克風/媒體權限，避免擾人彈窗
-    session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-        if (permission === 'media') {
-            callback(true); // 強制允許
-        } else {
-            callback(false);
-        }
+    // 關鍵防呆 1：自動允許麥克風權限，避免擾人彈窗 (僅限本 App 頁面、僅限音訊)
+    session.defaultSession.setPermissionRequestHandler((webContents, permission, callback, details = {}) => {
+        const isOwnPage =
+            isAppUrl(webContents.getURL(), isDev) && (!details.requestingUrl || isAppUrl(details.requestingUrl, isDev));
+        const audioOnly = (details.mediaTypes || []).every((type) => type === 'audio');
+        callback(permission === 'media' && isOwnPage && audioOnly);
     });
 
     // [Performance Optimization] 根據環境決定載入來源
@@ -135,7 +142,7 @@ async function bootstrap() {
 
         const iconPath = path.join(__dirname, 'clock.ico');
         tray = new Tray(iconPath);
-        tray.setToolTip('Virtual Music Clock');
+        tray.setToolTip('Swarm Clock');
 
         updateTrayMenu();
 
@@ -146,6 +153,16 @@ async function bootstrap() {
         console.error('App initialization failed:', err);
     }
 }
+
+// 防止任何視窗被導向 App 以外的網址或開啟新視窗
+app.on('web-contents-created', (_event, contents) => {
+    contents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    const blockForeignNavigation = (event, url) => {
+        if (!isAppUrl(url, isDev)) event.preventDefault();
+    };
+    contents.on('will-navigate', blockForeignNavigation);
+    contents.on('will-redirect', blockForeignNavigation);
+});
 
 bootstrap();
 
