@@ -4,8 +4,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-    title: 'Virtual Music Clock',
-    description: 'A desktop-grade audio visualization utility built with Electron and Next.js',
+    title: 'Swarm Clock',
+    description: 'A desktop analog clock whose particle swarm moves to your music',
 };
 
 export default function RootLayout({ children }) {

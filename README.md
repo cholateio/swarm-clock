@@ -1,66 +1,39 @@
-## Virtual Music Clock (Swarm Edition)
+# Swarm Clock
 
-A desktop-grade audio visualization utility built with Electron and Next.js, featuring a high-performance WebGL2 GPGPU particle system. This "Swarm Edition" transforms the traditional spectrum ring into a living ecosystem of thousands of particles that react, shatter, and recombine to the beat of your music.
+A small always-on-top analog clock for your Windows desktop that moves to the music you are playing. Run it, play anything, and thousands of particles ring the clock face and swarm with the sound.
 
-## Preview
+![The orange particle ring clock on the desktop with the tray menu open: Lock, Show the clock, Hide the clock, Close](https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4)
 
-![Demo](./public/intro.png)
+- **Reacts to sound**: a ring of particles around the clock bulges and ripples with 64 frequency bands from your system audio.
+- **Color follows the bass**: the swarm shifts from yellow toward orange and red as the low end gets louder.
+- **Stays out of the way**: a 250x250 transparent window with no border, always on top, and hidden from the taskbar.
+- **Click-through**: the tray menu switches between **Lock (mouse pass-through)** and **Unlock (allows dragging)**, so you can place it once and click through it afterwards.
 
-## Why I Made This
+The particle simulation runs on the GPU with WebGL2, so it needs a graphics driver that supports it.
 
-This project is a complete architectural restructure of my original music clock built 5 years ago with p5.js. By moving away from simple 2D Canvas lines to a GPGPU (General-Purpose Computing on Graphics Processing Units) approach, we can now simulate over 10,000 individual "swarm" particles at a locked 60FPS, each with its own momentum, friction, and "personality".
+## How it works
 
-## Features
+```
+System audio (Stereo Mix or mic) ──► hidden audio window: FFT
+        └─► WebSocket 127.0.0.1:8080 ──► clock window: particles + hands
+```
 
-- WebGL2 GPGPU Particle Engine: Uses Ping-Pong Framebuffer techniques to store and update particle positions and velocities directly on the GPU textures.
-
-- Swarm Ecology (Freedom vs. Core):
-    - Particles are differentiated by a unique random weight (pRand).
-
-    - Core Particles: Tightly bound to the clock's circular spectrum.
-
-    - Freedom Particles: React to Curl Noise and "swarm" around the perimeter, creating a nebula-like trail.
-
-- Spectrum-Driven Deformation: The swarm's return target is dynamically recalculated based on 64 frequency bands, creating a fluid, organic wave that mirrors the audio input.
-
-- Dynamic HSL Color Mapping: Maps real-time Bass energy to the HSL color space. The swarm shifts from a calm "Miku Green" to vibrant cyan and intense blues as the low-end frequency intensifies.
-
-- Dual-Layer Rendering:
-    - WebGL Layer: Handles the complex physical simulation and additive glow of the swarm particles.
-
-    - 2D Canvas Layer: Renders high-DPI sharp clock hands for clear time readability.
-
-## Tech Stack
-
-- Framework: Electron + Next.js (App Router)
-
-- Communication: Local WebSocket (ws) for cross-window data broadcasting
-
-- Audio Engine: Native Web Audio API for FFT Analysis
-
-- Graphics: WebGL2 for GPGPU simulation + HTML5 Canvas 2D for the UI
+The audio is analyzed in a hidden window inside the app and only the 128-bin spectrum numbers travel to the clock window; there is no recording, no server, and no network use beyond that local socket.
 
 ## Install
 
-```
-# Install dependencies
-npm install
+Needs Windows and Node.js 22.12 or newer. The clock listens to what your PC plays through the Windows **Stereo Mix** device, or to a microphone if you have no Stereo Mix.
 
-# Develop mode: start the full environment
-npm run start:all
+1. Turn on Stereo Mix: **Sound settings → Recording** (or **More sound settings → Recording**), right-click an empty area, choose **Show Disabled Devices**, then right-click **Stereo Mix** and choose **Enable**. Make it the default recording device.
+2. In a terminal, run `npm install`, then `npm run build`. The installer is written to the `release` folder.
+3. Run the installer and start **Swarm Clock**. Drag the clock where you want it, then right-click its tray icon and choose **Lock (mouse pass-through)**.
 
-# Build mode: production executable (.exe / .app)
-npm run build
-```
+To try it without installing, run `npm run start:all`.
 
-## Run
+## Privacy & security
 
-Currently the project needs to enable Stereo Mix to get the speaker's audio.
+Audio never leaves your machine. The app reads it from the default recording device, turns it into spectrum numbers in memory, and sends only those numbers to its own clock window over a WebSocket bound to `127.0.0.1`, so other computers cannot connect. The socket also rejects any connection whose Origin is not the app itself, so web pages in your browser cannot read it. Microphone permission is granted only to the app's own pages, for audio only. Nothing is saved or uploaded.
 
-[How to enable Stereo Mix in Win10](https://www.youtube.com/watch?v=Bd3moKLV5sE)
+## License
 
-You can change the setting to fix the clock also
-
-<img width="568" height="370" alt="image" src="https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4" />
-
-
+[MIT](LICENSE)

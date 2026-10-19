@@ -1,7 +1,10 @@
 {
-    "name": "virtual-music-clock",
+    "name": "swarm-clock",
     "version": "0.1.0",
     "private": true,
+    "engines": {
+        "node": ">=22.12"
+    },
     "main": "electron/main.js",
     "scripts": {
         "dev": "next dev",
@@ -31,7 +34,7 @@
     },
     "build": {
         "appId": "com.virtualmusicclock.app",
-        "productName": "Virtual Music Clock",
+        "productName": "Swarm Clock",
         "directories": {
             "output": "release"
         },
