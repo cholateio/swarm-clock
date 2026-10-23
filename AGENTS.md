@@ -30,7 +30,7 @@ A small always-on-top analog clock for the Windows desktop whose particle ring (
 - Conventional commits; run `npx next build` before committing.
 - GitHub Actions: top-level `permissions: contents: read`, raised per job only when needed.
 - GitHub Actions: pin every `uses:` to a 40-character commit SHA with a trailing `# vX.Y.Z` comment.
-- `README.md` and `README.zh-TW.md` mirror each other (English / Traditional Chinese); update both in the same commit.
+- `README.md` (Traditional Chinese, default) and `README.en.md` (English) mirror each other; update both in the same commit.
 
 ## Where to look
 

@@ -1,41 +1,41 @@
 # Swarm Clock
 
-**English** | [繁體中文](README.zh-TW.md)
+**繁體中文** | [English](README.en.md)
 
-A small always-on-top analog clock for your Windows desktop that moves to the music you are playing. Run it, play anything, and thousands of particles ring the clock face and swarm with the sound.
+一個放在 Windows 桌面、永遠置頂的小型指針時鐘，會跟著你正在播放的音樂律動。打開它、隨便播點什麼，數千顆粒子就會圍著錶面，隨著聲音聚散翻湧。
 
-![The orange particle ring clock on the desktop with the tray menu open: Lock, Show the clock, Hide the clock, Close](https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4)
+![桌面上的橘色粒子環時鐘，系統匣選單開著：Lock、Show the clock、Hide the clock、Close](https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4)
 
-- **Reacts to sound**: a ring of particles around the clock bulges and ripples with 64 frequency bands from your system audio.
-- **Color follows the bass**: the swarm shifts from yellow toward orange and red as the low end gets louder.
-- **Stays out of the way**: a 250x250 transparent window with no border, always on top, and hidden from the taskbar.
-- **Click-through**: the tray menu switches between **Lock (mouse pass-through)** and **Unlock (allows dragging)**, so you can place it once and click through it afterwards.
+- **跟著聲音動**：時鐘周圍的粒子環會依系統音訊的 64 個頻段鼓起、起伏。
+- **顏色跟著低音走**：低音越大聲，粒子群就從黃色往橘色、紅色偏移。
+- **不擋路**：250x250 的透明視窗，沒有邊框、永遠置頂，也不會出現在工作列上。
+- **滑鼠穿透**：系統匣選單可以在 **Lock (mouse pass-through)** 和 **Unlock (allows dragging)** 之間切換，擺好位置之後，滑鼠點擊就會直接穿過它。
 
-The particle simulation runs on the GPU with WebGL2, so it needs a graphics driver that supports it.
+粒子模擬用 WebGL2 在 GPU 上執行，所以需要支援 WebGL2 的顯示卡驅動程式。
 
-## How it works
+## 它怎麼運作
 
 ```
-System audio (Stereo Mix or mic) ──► hidden audio window: FFT
-        └─► WebSocket 127.0.0.1:8080 ──► clock window: particles + hands
+系統音訊（立體聲混音或麥克風）──► 隱藏的音訊視窗：FFT
+        └─► WebSocket 127.0.0.1:8080 ──► 時鐘視窗：粒子 + 指針
 ```
 
-The audio is analyzed in a hidden window inside the app and only the 128-bin spectrum numbers travel to the clock window; there is no recording, no server, and no network use beyond that local socket.
+音訊在 App 內的一個隱藏視窗裡分析，傳到時鐘視窗的只有 128 格的頻譜數字；不錄音、沒有伺服器，除了這個本機 socket 之外也不使用網路。
 
-## Install
+## 安裝
 
-Needs Windows and Node.js 22.12 or newer. The clock listens to what your PC plays through the Windows **Stereo Mix** device, or to a microphone if you have no Stereo Mix.
+需要 Windows 和 Node.js 22.12 以上。時鐘透過 Windows 的 **立體聲混音**（Stereo Mix）裝置聽你電腦正在播放的聲音；沒有立體聲混音的話，就改聽麥克風。
 
-1. Turn on Stereo Mix: **Sound settings → Recording** (or **More sound settings → Recording**), right-click an empty area, choose **Show Disabled Devices**, then right-click **Stereo Mix** and choose **Enable**. Make it the default recording device.
-2. In a terminal, run `npm install`, then `npm run build`. The installer is written to the `release` folder.
-3. Run the installer and start **Swarm Clock**. Drag the clock where you want it, then right-click its tray icon and choose **Lock (mouse pass-through)**.
+1. 開啟立體聲混音：**音效設定 → 錄製**（或 **更多音效設定 → 錄製**），在空白處按右鍵，選 **顯示已停用的裝置**，再對 **立體聲混音** 按右鍵選 **啟用**。然後把它設成預設錄音裝置。
+2. 在終端機執行 `npm install`，再執行 `npm run build`。安裝程式會產生在 `release` 資料夾。
+3. 執行安裝程式，打開 **Swarm Clock**。把時鐘拖到你想放的位置，然後在它的系統匣圖示按右鍵，選 **Lock (mouse pass-through)**。
 
-To try it without installing, run `npm run start:all`.
+不想安裝、只想先試試的話，執行 `npm run start:all`。
 
-## Privacy & security
+## 隱私與安全
 
-Audio never leaves your machine. The app reads it from the default recording device, turns it into spectrum numbers in memory, and sends only those numbers to its own clock window over a WebSocket bound to `127.0.0.1`, so other computers cannot connect. The socket also rejects any connection whose Origin is not the app itself, so web pages in your browser cannot read it. Microphone permission is granted only to the app's own pages, for audio only. Nothing is saved or uploaded.
+音訊不會離開你的電腦。App 從預設錄音裝置讀取音訊，在記憶體裡轉成頻譜數字，只把這些數字透過綁定在 `127.0.0.1` 的 WebSocket 送到自己的時鐘視窗，所以其他電腦連不進來。這個 socket 也會拒絕 Origin 不是 App 本身的連線，所以你瀏覽器裡的網頁讀不到它。麥克風權限只開給 App 自己的頁面，而且只限音訊。不會儲存或上傳任何東西。
 
-## License
+## 授權
 
 [MIT](LICENSE)
