@@ -1,5 +1,7 @@
 # Swarm Clock
 
+**English** | [繁體中文](README.zh-TW.md)
+
 A small always-on-top analog clock for your Windows desktop that moves to the music you are playing. Run it, play anything, and thousands of particles ring the clock face and swarm with the sound.
 
 ![The orange particle ring clock on the desktop with the tray menu open: Lock, Show the clock, Hide the clock, Close](https://github.com/user-attachments/assets/711fbbd3-0bb1-4d4d-b9d4-44c76bfa33d4)
